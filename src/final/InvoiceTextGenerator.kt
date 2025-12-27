@@ -26,22 +26,22 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
 
         for (item in order.shipmentItems) {
             val product = products[item.productID]!!
-            var thisCost = 0
+            var itemCost = 0
             when (product.shippingMethod) {
                 "standard" -> {
-                    thisCost = 500
+                    itemCost = 500
                     if (item.weight > 5.0) {
-                        thisCost += (100 * (item.weight - 5.0)).toInt()
+                        itemCost += (100 * (item.weight - 5.0)).toInt()
                     }
                 }
 
                 "express" -> {
-                    thisCost = 1200
+                    itemCost = 1200
                     if (item.weight > 3.0) {
-                        thisCost += (250 * (item.weight - 3.0)).toInt()
+                        itemCost += (250 * (item.weight - 3.0)).toInt()
                     }
 
-                    thisCost += 150 * item.quantity
+                    itemCost += 150 * item.quantity
                 }
 
                 else -> {
@@ -55,10 +55,10 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
             }
 
             result +=
-                "  ${product.name}: ${formatCurrency(thisCost)} " +
+                "  ${product.name}: ${formatCurrency(itemCost)} " +
                         "(${item.quantity} items, ${item.weight}kg)\n"
 
-            totalCost += thisCost
+            totalCost += itemCost
         }
 
         result += "Total shipping cost is ${formatCurrency(totalCost)}\n"
