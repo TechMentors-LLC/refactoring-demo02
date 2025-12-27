@@ -18,15 +18,16 @@ data class Product(
 )
 
 data class InvoiceData(val customerName: String, val loyaltyPoints: Int, val totalCost: Int)
-
+data class InvoiceLine(val itemCost: Int)
 class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>) {
 
     fun generate(): String {
         val invoiceData = InvoiceData(order.customerName, calcLoyaltyPoints(), calcTotalCost())
         var result = "Shipping Invoice for ${invoiceData.customerName}\n"
         for (item in order.shipmentItems) {
+            val invoiceLine = InvoiceLine(calcItemCost(item))
             result += getInoviceForLineItem(
-                calcItemCost(item),
+                invoiceLine.itemCost,
                 item.quantity,
                 getProduct(item).name,
                 item.weight
