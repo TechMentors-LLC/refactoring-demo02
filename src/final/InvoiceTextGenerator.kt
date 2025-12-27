@@ -16,6 +16,7 @@ data class Product(
     val name: String,
     val shippingMethod: String
 )
+
 data class InvoiceData(val customerName: String, val loyaltyPoints: Int, val totalCost: Int)
 
 class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>) {
@@ -24,7 +25,12 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
         val invoiceData = InvoiceData(order.customerName, calcLoyaltyPoints(), calcTotalCost())
         var result = "Shipping Invoice for ${invoiceData.customerName}\n"
         for (item in order.shipmentItems) {
-            result += getInoviceForLineItem(item)
+            result += getInoviceForLineItem(
+                calcItemCost(item),
+                item.quantity,
+                getProduct(item).name,
+                item.weight
+            )
         }
 
         result += "Total shipping cost is ${formatCurrency(calcTotalCost())}\n"
@@ -51,10 +57,9 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
 
     private fun getProduct(item: ShipmentItem): Product = products[item.productID]!!
 
-    private fun getInoviceForLineItem(item: ShipmentItem): String {
-        val itemCost = calcItemCost(item)
-        return "  ${getProduct(item).name}: ${formatCurrency(itemCost)} " +
-                "(${item.quantity} items, ${item.weight}kg)\n"
+    private fun getInoviceForLineItem(itemCost: Int, itemQuantity: Int, productName: String, itemWeight: Double): String {
+        return "  $productName: ${formatCurrency(itemCost)} " +
+                "($itemQuantity items, ${itemWeight}kg)\n"
     }
 
     private fun calcLoyaltyPointsIncrease(item: ShipmentItem): Int {
