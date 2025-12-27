@@ -28,9 +28,14 @@ data class InvoiceLine(val itemCost: Int, val itemQuantity: Int, val productName
 class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>) {
 
     fun generate(): String {
+        val invoiceData = getInvoiceData()
+        return presentInvoiceText(invoiceData)
+    }
+
+    private fun getInvoiceData(): InvoiceData {
         val invoiceLines = order.shipmentItems.map { getInvoiceLine(it) }
         val invoiceData = InvoiceData(order.customerName, calcLoyaltyPoints(), calcTotalCost(), invoiceLines)
-        return presentInvoiceText(invoiceData)
+        return invoiceData
     }
 
     private fun presentInvoiceText(invoiceData: InvoiceData): String {
