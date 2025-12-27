@@ -52,8 +52,7 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
     private fun getProduct(item: ShipmentItem): Product = products[item.productID]!!
 
     private fun getInoviceForLineItem(itemCost: Int, item: ShipmentItem): String {
-        val product = getProduct(item)
-        return "  ${product.name}: ${formatCurrency(itemCost)} " +
+        return "  ${getProduct(item).name}: ${formatCurrency(itemCost)} " +
                 "(${item.quantity} items, ${item.weight}kg)\n"
     }
 
