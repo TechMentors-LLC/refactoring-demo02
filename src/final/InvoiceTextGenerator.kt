@@ -43,6 +43,7 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
                 "(${item.quantity} items, ${item.weight}kg)\n"
 
     private fun calcLoyaltyPointsIncrease(item: ShipmentItem, product: Product): Int {
+        val product = getProduct(item)
         var loyaltyPoints = maxOf(item.quantity - 2, 0)
         if ("express" == product.shippingMethod) {
             loyaltyPoints += item.quantity / 3
