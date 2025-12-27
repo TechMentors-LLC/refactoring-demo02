@@ -20,9 +20,9 @@ data class Product(
 class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>) {
 
     fun generate(): String {
-        var loyaltyPoints = 0
         var result = "Shipping Invoice for ${order.customerName}\n"
 
+        var loyaltyPoints = 0
         for (item in order.shipmentItems) {
             loyaltyPoints += calcLoyaltyPointsIncrease(item)
         }
