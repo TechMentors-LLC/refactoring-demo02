@@ -4,6 +4,7 @@ import final.Product
 import final.ShipmentItem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class InvoiceTextGeneratorTest {
 
@@ -37,6 +38,26 @@ Total shipping cost is ${'$'}41.84
 You earned 5 loyalty points
 """
         assertEquals(expected, actualInvoiceText)
+    }
+
+    @Test
+    fun `generate should throw for order of with not-existing shipping method`() {
+        val products = mapOf(
+            "LAPTOP" to Product("Premium Laptop", "light"),
+        )
+
+        val order = Order(
+            customerName = "Acme Corp",
+            shipmentItems = listOf(
+                ShipmentItem("LAPTOP", 3, 8.5),
+            )
+        )
+
+        val exception = assertThrows<IllegalArgumentException> {
+            InvoiceTextGenerator(order, products).generate()
+        }
+
+        assertEquals("unknown shipping method: light", exception.message)
     }
 
 }
