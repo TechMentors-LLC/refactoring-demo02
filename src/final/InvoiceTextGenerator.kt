@@ -26,8 +26,11 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
 
         for (item in order.shipmentItems) {
             loyaltyPoints += calcLoyaltyPointsIncrease(item)
-            result += getInoviceForLineItem(calcItemCost(item), item)
             totalCost += calcItemCost(item)
+        }
+
+        for (item in order.shipmentItems) {
+            result += getInoviceForLineItem(calcItemCost(item), item)
         }
 
         result += "Total shipping cost is ${formatCurrency(totalCost)}\n"
