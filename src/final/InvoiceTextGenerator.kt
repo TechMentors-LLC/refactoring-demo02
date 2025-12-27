@@ -26,7 +26,7 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
 
         for (item in order.shipmentItems) {
             val product = products[item.productID]!!
-            var itemCost = calcItemCost(product, item)
+            val itemCost = calcItemCost(product, item)
 
             loyaltyPoints += kotlin.comparisons.maxOf(item.quantity - 2, 0)
             if ("express" == product.shippingMethod) {
