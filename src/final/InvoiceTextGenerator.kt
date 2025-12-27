@@ -25,7 +25,7 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
         var result = "Shipping Invoice for ${order.customerName}\n"
 
         for (item in order.shipmentItems) {
-            val product = products[item.productID]!!
+            val product = getProduct(item)
             val itemCost = calcItemCost(product, item)
             loyaltyPoints += calcLoyaltyPointsIncrease(item, product)
             result += getInoviceForLineItem(product, itemCost, item)
@@ -37,6 +37,8 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
 
         return result
     }
+
+    private fun getProduct(item: ShipmentItem): Product = products[item.productID]!!
 
     private fun getInoviceForLineItem(product: Product, itemCost: Int, item: ShipmentItem): String =
         "  ${product.name}: ${formatCurrency(itemCost)} " +
