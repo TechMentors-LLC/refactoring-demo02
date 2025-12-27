@@ -20,11 +20,10 @@ data class Product(
 class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>) {
 
     fun generate(): String {
-        var result = "Shipping Invoice for ${order.customerName}\n"
-
         val loyaltyPoints = calcLoyaltyPoints()
         val totalCost = calcTotalCost()
 
+        var result = "Shipping Invoice for ${order.customerName}\n"
         for (item in order.shipmentItems) {
             result += getInoviceForLineItem(calcItemCost(item), item)
         }
