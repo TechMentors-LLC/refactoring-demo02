@@ -44,7 +44,7 @@ class InvoiceTextGenerator(val order: Order, val products: Map<String, Product>)
             result += getInoviceForLineItem(invoiceLine)
         }
 
-        result += "Total shipping cost is ${formatCurrency(calcTotalCost())}\n"
+        result += "Total shipping cost is ${formatCurrency(invoiceData.totalCost)}\n"
         result += "You earned ${invoiceData.loyaltyPoints} loyalty points\n"
 
         return result
